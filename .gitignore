@@ -1,0 +1,9 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea/.gitignore
+.idea/inspectionProfiles/
+.idea/md5.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+__pycache__/
+venv/
