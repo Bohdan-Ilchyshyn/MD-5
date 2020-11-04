@@ -4,11 +4,12 @@ from md5 import MD5
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="""""", usage='lcg [arguments] N')
+    parser = argparse.ArgumentParser(description="""""", usage='main [arguments]')
     parser.add_argument('-f', help='file path', type=str)
-    parser.add_argument('-m', help='text', type=str)
+    parser.add_argument('-m', help='message', type=str)
     parser.add_argument('-s', help='save to file', dest='filename', type=str)
-    parser.add_argument('-t', help='test', action='store_true')
+    parser.add_argument('-t', help='test (RFC 1321)', action='store_true')
+    parser.add_argument('--hash', help='hash to check', type=str)
     return parser.parse_args()
 
 
@@ -25,7 +26,13 @@ def main():
 
     if isinstance(md5, MD5):
         h = md5.hash()
-        print('\033[92m' + h)
+        if args.hash:
+            if h == str.lower(args.hash):
+                print('\033[92m' + 'hash of file: ' + h + ' == ' + args.hash)
+            else:
+                print('\033[91m' + 'hash of file: ' + h + ' != ' + args.hash)
+        else:
+            print('\033[92m' + 'hash of file: ' + h)
 
     if args.filename:
         with open(args.s, 'w') as file:
@@ -39,15 +46,15 @@ def main():
             'message digest': 'F96B697D7CB7938D525A2F31AAF161D0',
             'abcdefghijklmnopqrstuvwxyz': 'C3FCD3D76192E4007DFB496CCA67E13B',
             'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789': 'D174AB98D277D9F5A5611C2C9F419D9F',
-            '12345678901234567890123456789012345678901234567890123456789012345678901234567890': '57EDF4A22BE3C955AC49DA2E2107B67A '
+            '12345678901234567890123456789012345678901234567890123456789012345678901234567890': '57EDF4A22BE3C955AC49DA2E2107B67A'
         }
         for k, v in test_dict.items():
             md = MD5(k)
             h = md.hash()
             if h == str.lower(v):
-                print('\033[92m' + ' ' + h + ' ' + v)
+                print('\033[92m' + ' ' + h + ' == ' + v)
             else:
-                print('\033[91m' + ' ' + h + ' ' + v)
+                print('\033[91m' + ' ' + h + ' != ' + v)
 
 
 if __name__ == '__main__':
